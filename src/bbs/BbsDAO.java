@@ -53,7 +53,7 @@ public class BbsDAO {
 	
 	public int write(String bbsTitle, String userID, String bbsContent) {
 		
-		String SQL = "INSERT INTO BBS VALUES (?, ?, ?, ?, ?, ?)";
+		String SQL = "insert into bbs values (?, ?, ?, ?, ?, ?)";
 		
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -134,7 +134,7 @@ public class BbsDAO {
 	}
 	
 	public int update(int bbsID, String bbsTitle, String bbsContent) {
-		String SQL = "UPDATE BBS SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?";
+		String SQL = "UPDATE bbs SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?";
 		
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
@@ -150,7 +150,7 @@ public class BbsDAO {
 	}
 	
 	public int delete(int bbsID) {
-		String SQL = "UPDATE BBS SET bbsAvailable = 0 where bbsID = ?";
+		String SQL = "UPDATE bbs SET bbsAvailable = 0 where bbsID = ?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setInt(1, bbsID);
