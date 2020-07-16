@@ -4,6 +4,7 @@
 <%@ page import = "bbs.BbsDAO" %>
 <%@ page import = "bbs.Bbs" %>
 <%@ page import = "java.util.ArrayList" %>
+<%@ taglib prefix = "c" uri = "http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,10 +25,6 @@
 		String userID = null;
 		if(session.getAttribute("userID") != null){
 			userID = (String) session.getAttribute("userID");
-		}
-		int pageNumber = 1;
-		if(request.getParameter("pageNumber") != null){
-			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));
 		}
 	%>
 	<nav class = "navbar navbar-default">
@@ -100,37 +97,29 @@
 					</tr>				
 				</thead>
 				<tbody>
-					<%
-						BbsDAO bbsDAO = new BbsDAO();
-						ArrayList<Bbs> list = bbsDAO.getList(pageNumber);
-						for(int i=0; i<list.size(); i++){
-					%>
-					
-					<tr>
-						<td><%=list.get(i).getBbsID()%></td>					
-						<td><a href = "view.jsp?bbsID=<%=list.get(i).getBbsID()%>"><%=list.get(i).getBbsTitle().replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>")%></a></td>					
-						<td><%=list.get(i).getUserID()%></td>					
-						<td><%=list.get(i).getBbsDate().substring(0, 11) + list.get(i).getBbsDate().substring(11, 13) + "시" + list.get(i).getBbsDate().substring(14, 16) + "분" %></td>					
+					<c:forEach items = "${list}" var = "bbs">
+						<tr>
+						<td>${bbs.bbsID}</td>		
+						<td><a href = "view.jsp?bbsID=${bbs.bbsID}">${bbs.bbsTitle}</a></td>					
+						<td>${bbs.userID }</td>					
+						<td>${bbs.bbsDate}</td>					
 					</tr>
-					
-					<%
-						}	
-					%>
-				
-					
+					</c:forEach>
 				</tbody>
 			</table>
-			<%
-				if(pageNumber != 1){
-			%>
-				<a href="bbs.jsp?pageNumber=<%=pageNumber-1 %>" class = "btn btn-success btn-arraw-left">이전</a>
-			<%
-				}if(bbsDAO.nextPage(pageNumber + 1)){
-			%>
-				<a href="bbs.jsp?pageNumber=<%=pageNumber+1 %>" class = "btn btn-success btn-arraw-right">다음</a>		
-			<%
-				}
-			%>
+			
+			<c:if test = "${pageNumber !=1 }">
+				<a href="bbs.jsp?pageNumber= ${pageNumber - 1}" class = "btn btn-success btn-arraw-left">이전</a>
+			</c:if>
+		
+			<c:if test = "${bbsDAO.nextPage(pageNumber+1)}">
+				<a href="bbs.jsp?pageNumber=${pageNumber + 1}" class = "btn btn-success btn-arraw-right">다음</a>
+			</c:if>
+			
+	
+			
+			
+			
 			<a href = "write.jsp" class = "btn btn-primary pull-right">글쓰기</a>
 		</div>
 	</div>
