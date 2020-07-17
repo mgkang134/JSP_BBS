@@ -51,6 +51,21 @@ public class BbsDAO {
 		return -1; 	//데이터베이스 오류
 	}
 	
+	public int getTotalNum() {
+		String SQL = "select count(*) from bbs where bbsAvailable != 0";
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				return rs.getInt(1);
+			}
+			return 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return -1; 	//데이터베이스 오류
+	}
+	
 	public int write(String bbsTitle, String userID, String bbsContent) {
 		
 		String SQL = "insert into bbs values (?, ?, ?, ?, ?, ?)";
@@ -95,6 +110,8 @@ public class BbsDAO {
 		}
 		return list; 	
 	}
+	
+	
 	
 	public boolean nextPage(int pageNumber) {
 		String SQL = "SELECT * FROM bbs WHERE bbsID < ? AND bbsAvailable = 1";

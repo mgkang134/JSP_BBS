@@ -75,10 +75,18 @@ public class BFrontController extends HttpServlet {
 			command = new BReplyCommand();
 			command.execute(request, response);
 			viewPage = "list.do";
+		}else if(com.equals("/login.do")) {
+			command = new BLoginCommand();
+			command.execute(request, response);
+		}else if(com.equals("/login_view.do")) {
+			viewPage = "login_view.jsp";
 		}
 		
-		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
-		dispatcher.forward(request, response);
+		if(viewPage != null) {
+			RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
+			dispatcher.forward(request, response);
+		}
+		
 		
 		
 	}

@@ -19,6 +19,9 @@
 		text-decoration: none;
 	}
 </style>
+<script>
+	
+</script>
 </head>
 <body>
 	<%
@@ -54,8 +57,8 @@
 						data-toggle = "dropdown" role = "button" aria-haspopup="true"
 						aria-expanded="false">접속하기<span class="caret"></span></a>
 						<ul class = "dropdown-menu">
-							<li><a href = "login.jsp">로그인</a></li>
-							<li><a href = "join.jsp">회원가입</a></li>
+							<li><a href = "login_view.do">로그인</a></li>
+							<li><a href = "join.do">회원가입</a></li>
 						</ul>
 				</li>
 			</ul>
@@ -100,20 +103,24 @@
 					<c:forEach items = "${list}" var = "bbs">
 						<tr>
 						<td>${bbs.bbsID}</td>		
-						<td><a href = "view.jsp?bbsID=${bbs.bbsID}">${bbs.bbsTitle}</a></td>					
+						<td><a href = "content_view.do?bbsID=${bbs.bbsID}">${bbs.bbsTitle}</a></td>					
 						<td>${bbs.userID }</td>					
 						<td>${bbs.bbsDate}</td>					
 					</tr>
 					</c:forEach>
 				</tbody>
 			</table>
+			<c:set var = "curPage" value = "${paging.getCurPage()}"/>
+			<c:set var = "blockStartNum" value = "${paging.getBlockStartNum()}"/>
+			<c:set var = "blockLastNum" value = "${paging.getBlockLastNum()}"/>
+			<c:set var = "lastPageNum" value = "${paging.getLastPageNum()}"/>
 			
-			<c:if test = "${pageNumber !=1 }">
-				<a href="bbs.jsp?pageNumber= ${pageNumber - 1}" class = "btn btn-success btn-arraw-left">이전</a>
+			<c:if test = "${curPage > 5}">
+				<a href="list.do?pageNumber=${blockStartNum - 1}" class = "btn btn-success btn-arraw-left">이전</a>
 			</c:if>
 		
-			<c:if test = "${bbsDAO.nextPage(pageNumber+1)}">
-				<a href="bbs.jsp?pageNumber=${pageNumber + 1}" class = "btn btn-success btn-arraw-right">다음</a>
+			<c:if test = "${lastPageNum > blockLastNum}">
+				<a href="list.do?pageNumber=${blockLastNum + 1}" class = "btn btn-success btn-arraw-right">다음</a>
 			</c:if>
 			
 	
