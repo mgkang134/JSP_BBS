@@ -60,7 +60,7 @@ public class BLoginCommand implements BCommand {
 			PrintWriter script = response.getWriter();
 			script.print(htmlContent);
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 }

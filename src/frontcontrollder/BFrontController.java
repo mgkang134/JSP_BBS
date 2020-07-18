@@ -50,7 +50,7 @@ public class BFrontController extends HttpServlet {
 		}else if(com.equals("/write.do")) {
 			command = new BWriteCommand();
 			command.execute(request, response);
-			viewPage = "list.do";
+//			viewPage = "list.do";
 		}else if(com.equals("/list.do")) {
 			command = new BListCommand();
 			command.execute(request, response);
@@ -80,6 +80,9 @@ public class BFrontController extends HttpServlet {
 			command.execute(request, response);
 		}else if(com.equals("/login_view.do")) {
 			viewPage = "login_view.jsp";
+		}else if(com.equals("/logout.do")) {
+			command = new BLogoutCommand();
+			command.execute(request, response);
 		}
 		
 		if(viewPage != null) {
