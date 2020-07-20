@@ -3,6 +3,8 @@ package paging;
 public class Paging {
 	private final static int pageCount = 5;
 	private int blockStartNum = 0; 
+	
+	
 	private int blockLastNum = 0; 
 	private int lastPageNum = 0;
 	
@@ -44,7 +46,7 @@ public class Paging {
 	}
 	
 	private void makeLastPageNum() {
-		lastPageNum = ((totalNum-1)/pageCount) + 1;
+		lastPageNum = ((totalNum-1)/10) + 1;
 	}
 
 }

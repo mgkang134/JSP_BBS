@@ -12,7 +12,9 @@
 </head>
 <body>
 
-	<jsp:include page="/layout/navbar.jsp"></jsp:include>
+	<jsp:include page="/layout/navbar.jsp">
+		<jsp:param name = "tab_main" value = "active"/>
+	</jsp:include>
 	<div class = "container">
 		<div class = "jumbotron">
 			<div class = "container">

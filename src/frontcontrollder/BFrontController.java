@@ -83,6 +83,11 @@ public class BFrontController extends HttpServlet {
 		}else if(com.equals("/logout.do")) {
 			command = new BLogoutCommand();
 			command.execute(request, response);
+		}else if(com.equals("/join.do")) {
+			command = new BJoinCommand();
+			command.execute(request, response);
+		}else if(com.equals("/join_view.do")) {
+			viewPage = "join_view.jsp";
 		}
 		
 		if(viewPage != null) {

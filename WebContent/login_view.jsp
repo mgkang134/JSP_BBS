@@ -9,7 +9,9 @@
 <title>JSP 게시판 웹사이트</title>
 </head>
 <body>
-	<jsp:include page="/layout/navbar.jsp"></jsp:include>
+	<jsp:include page="/layout/navbar.jsp">
+		<jsp:param name = "tab_login" value = "active"/>
+	</jsp:include>
 	<div class = "container">
 		<div class = "col-lg-4"></div>
 		<div class = "col-lg-4">
