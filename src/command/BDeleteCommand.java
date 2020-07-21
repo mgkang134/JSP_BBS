@@ -1,14 +1,82 @@
 package command;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import bbs.Bbs;
+import bbs.BbsDAO;
 
 public class BDeleteCommand implements BCommand {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
+		
+		response.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
+		HttpSession session = request.getSession();
+		
+		String htmlContent = "";
+		
+		String userID = null;
+		if(session.getAttribute("userID") != null){
+			userID = (String) session.getAttribute("userID");
+		}
 
+		if(userID == null){
+			htmlContent += "<script>\n";
+			htmlContent += "alert('로그인을 하세요')\n";
+			htmlContent += "location.href = 'login.jsp'\n";
+			htmlContent += "</script>";
+		}
+		
+		int bbsID = 0;
+		if(request.getParameter("bbsID") != null){
+			bbsID = Integer.parseInt(request.getParameter("bbsID"));
+		}
+		if(bbsID == 0){
+			
+			htmlContent += "<script>\n";
+			htmlContent += "alert('유효하지 않은 글입니다.')\n";
+			htmlContent += "location.href = 'bbs.jsp'\n";
+			htmlContent += "</script>";
+		}
+		
+		Bbs bbs = new BbsDAO().getBbs(bbsID);
+		
+		if(!userID.equals(bbs.getUserID())){
+			
+			htmlContent += "<script>\n";
+			htmlContent += "alert('권한이 없습니다.')\n";
+			htmlContent += "location.href = 'bbs.jsp'\n";
+			htmlContent += "</script>";
+		}else{
+				BbsDAO bbsDAO = new BbsDAO();
+				int result  = bbsDAO.delete(bbsID);
+				if(result == -1){
+					
+					htmlContent += "<script>\n";
+					htmlContent += "alert('글 삭제에 실패했습니다.')\n";
+					htmlContent += "history.back()\n";
+					htmlContent += "</script>";
+				}else{
+					
+					htmlContent += "<script>\n";
+					htmlContent += "location.href = 'bbs.jsp'\n";
+					htmlContent += "</script>";
+				}
+		}
+		
+		PrintWriter script;
+		try {
+			script = response.getWriter();
+			script.write(htmlContent);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

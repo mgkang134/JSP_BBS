@@ -1,4 +1,4 @@
-package frontcontrollder;
+package frontcontroller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -88,6 +88,8 @@ public class BFrontController extends HttpServlet {
 			command.execute(request, response);
 		}else if(com.equals("/join_view.do")) {
 			viewPage = "join_view.jsp";
+		}else if(com.equals("/delete.do")) {
+			command = new BDeleteCommand();
 		}
 		
 		if(viewPage != null) {
