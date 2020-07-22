@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 import bbs.Bbs;
 import bbs.BbsDAO;
 
-public class BDeleteCommand implements BCommand {
+public class BUpdateCommand implements BCommand {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -18,7 +18,6 @@ public class BDeleteCommand implements BCommand {
 		response.setCharacterEncoding("UTF-8");
 		response.setContentType("text/html; charset=UTF-8");
 		HttpSession session = request.getSession();
-
 		
 		String htmlContent = "";
 		
@@ -39,36 +38,40 @@ public class BDeleteCommand implements BCommand {
 			bbsID = Integer.parseInt(request.getParameter("bbsID"));
 		}
 		if(bbsID == 0){
-			
 			htmlContent += "<script>\n";
 			htmlContent += "alert('유효하지 않은 글입니다.')\n";
-			htmlContent += "location.href = 'list.do";
+			htmlContent += "location.href = 'list.do'\n";
 			htmlContent += "</script>";
 		}
 		
 		Bbs bbs = new BbsDAO().getBbs(bbsID);
-		
 		if(!userID.equals(bbs.getUserID())){
-			
 			htmlContent += "<script>\n";
 			htmlContent += "alert('권한이 없습니다.')\n";
 			htmlContent += "location.href = 'list.do'\n";
 			htmlContent += "</script>";
 		}else{
-				BbsDAO bbsDAO = new BbsDAO();
-				int result  = bbsDAO.delete(bbsID);
-				if(result == -1){
-					
-					htmlContent += "<script>\n";
-					htmlContent += "alert('글 삭제에 실패했습니다.')\n";
-					htmlContent += "history.back()\n";
-					htmlContent += "</script>";
-				}else{
-					
-					htmlContent += "<script>\n";
-					htmlContent += "location.href = 'list.do'\n";
-					htmlContent += "</script>";
-				}
+			if(request.getParameter("bbsTitle") == null || request.getParameter("bbsContent") == null
+					|| request.getParameter("bbsTitle").equals("") || request.getParameter("bbsContent").equals("")){
+				
+						htmlContent += "<script>\n";
+						htmlContent += "alert('입력이 안된 사항이 있습니다.')\n";
+						htmlContent += "history.back()\n";
+						htmlContent += "</script>";
+					}else{
+						BbsDAO bbsDAO = new BbsDAO();
+						int result  = bbsDAO.update(bbsID, request.getParameter("bbsTitle"), request.getParameter("bbsContent"));
+						if(result == -1){
+							htmlContent += "<script>\n";
+							htmlContent += "alert('글 수정에 실패했습니다.')\n";
+							htmlContent += "history.back()\n";
+							htmlContent += "</script>";
+						}else{
+							htmlContent += "<script>\n";
+							htmlContent += "location.href = 'list.do'\n";
+							htmlContent += "</script>";
+						}
+					}
 		}
 		
 		PrintWriter script;
@@ -78,7 +81,7 @@ public class BDeleteCommand implements BCommand {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
 
+	}
 
 }
