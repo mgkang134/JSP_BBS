@@ -100,6 +100,15 @@
 		  
 		  <a href = "write_view.do" class = "btn btn-primary pull-right">글쓰기</a>
 		</nav>
+		<nav aria-label = "search bar">
+			<div class = "md-form mt-0">
+				<form name = "f" action = "list.do" method = "get">
+					<input class = "form-control" name = "query" id = "query" type = "text" placeholder="Search" aria-label = "Search">
+					<input type = "submit" value = "검색">
+				</form>
+				
+			</div>
+		</nav>
 		
 		
 	</div>

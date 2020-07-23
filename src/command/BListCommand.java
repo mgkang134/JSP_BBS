@@ -22,16 +22,27 @@ public class BListCommand implements BCommand {
 		}
 		request.setAttribute("pageNumber", pageNumber);
 		
-		//다음 페이지가 존재하는지의 여부를 변수에 저장
-		if(dao.nextPage(pageNumber+1)) {
-			request.setAttribute("isNextPage", true);
-		}
+		String query = null;													//검색 쿼리가 파라미터로 넘어왔을 경우
+		query = request.getParameter("query");
 		
 		//페이징 처리
-		Paging paging = new Paging(pageNumber, dao.getTotalNum());
+		Paging paging;
+		
+		if(query==null) {
+			paging = new Paging(pageNumber, dao.getTotalNum());
+		}else {
+			paging = new Paging(pageNumber, dao.getTotalNum(query));
+		}
+				
 		request.setAttribute("paging", paging);
 		
-		ArrayList<Bbs> bbss = dao.getList(pageNumber);
+		ArrayList<Bbs> bbss;
+		
+		if(query==null) {
+			bbss = dao.getList(pageNumber);
+		}else {
+			bbss = dao.getList(pageNumber, query);
+		}
 							
 		for(Bbs bbs : bbss) { 											//list.jsp에 맞게 가공한다.
 			
