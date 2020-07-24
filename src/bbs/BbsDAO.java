@@ -75,7 +75,7 @@ public class BbsDAO {
 		String SQL = "select count(*) from bbs where bbsAvailable != 0 and bbsContent like ?";
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(0, query);
+			pstmt.setString(1, "%" + query + "%");
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				return rs.getInt(1);
@@ -135,15 +135,14 @@ public class BbsDAO {
 	
 public ArrayList<Bbs> getList(int pageNumber, String query){
 		
-	String SQL = "select * from (select @rownum:=@rownum+1 as rownum, b.* from (SELECT * FROM bbs WHERE bbsAvailable = 1 AND (bbsContent like \"?\" OR bbsTitle like \"?\") ORDER BY bbsID DESC) b where (@rownum:=0)=0) c where c.rownum>=? and c.rownum <= ?;";
+	String SQL = "select b.* from (SELECT * FROM bbs WHERE bbsAvailable = 1 AND (bbsTitle like ? OR bbsContent like ?) ORDER BY bbsID DESC) as b LIMIT ?, 10;";
 		ArrayList<Bbs> list = new ArrayList<Bbs>();
 		
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, "%" + query + "%");
 			pstmt.setString(2, "%" + query + "%");
-			pstmt.setInt(3, 1);
-			pstmt.setInt(4, 10);
+			pstmt.setInt(3, (pageNumber-1)*10);
 			rs = pstmt.executeQuery();
 			while(rs.next()) {
 				Bbs bbs = new Bbs();

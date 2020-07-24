@@ -49,68 +49,96 @@
 			</table>
 		</div>
 			
-		<c:set var = "curPage" value = "${paging.getCurPage()}"/>
-		<c:set var = "blockStartNum" value = "${paging.getBlockStartNum()}"/>
-		<c:set var = "blockLastNum" value = "${paging.getBlockLastNum()}"/>
-		<c:set var = "lastPageNum" value = "${paging.getLastPageNum()}"/>
+		<div class = "text-center">
+			<c:set var = "curPage" value = "${paging.getCurPage()}"/>
+			<c:set var = "blockStartNum" value = "${paging.getBlockStartNum()}"/>
+			<c:set var = "blockLastNum" value = "${paging.getBlockLastNum()}"/>
+			<c:set var = "lastPageNum" value = "${paging.getLastPageNum()}"/>
 		
-		<nav aria-label="Page navigation example">
-		  <ul class="pagination justify-content-center">
-		  
-		  	<c:set var="isDisabled" value = ""/>
-		  	<c:choose>
-		  		<c:when test="${curPage <= 5}">
-		  			<li class="page-item disabled" ><a class="page-link" tabindex="-1" href="#">이전</a></li>
-		  		</c:when>
-		  		<c:otherwise>
-		  			<li class="page-item" ><a class="page-link" href="list.do?pageNumber=${blockStartNum - 1}">이전</a></li>
-		  		</c:otherwise>
-		  	</c:choose>
-		  	
-			<c:forEach var="i" begin="${ blockStartNum }" end="${ blockLastNum }">
-	            <c:choose>
-	                <c:when test="${ i > lastPageNum }">
-	                	<li class="page-item disabled">
-	                		<a class="page-link" href="#" tabindex="-1">${ i }</a>
-                		</li>
-	                </c:when>
-	                
-	                <c:when test="${ i == curPage }">
-	                    <li class="page-item active">
-	                    	<a class="page-link" href="list.do?pageNumber=${ i }">${ i }</a>
-	                    </li>
-	                </c:when>
-	                
-	                <c:otherwise>
-	                	<li class="page-item"><a class="page-link" href="list.do?pageNumber=${ i }">${ i }</a></li>
-	                </c:otherwise>
-	           	</c:choose>
-        	</c:forEach>
-        	
-        	<c:choose>
-		  		<c:when test="${lastPageNum <= blockLastNum}">
-		  			<li class="page-item disabled" ><a class="page-link" tabindex="-1" href="#">다음</a></li>
-		  		</c:when>
-		  		<c:otherwise>
-		  			<li class="page-item" ><a class="page-link" href="list.do?pageNumber=${blockLastNum + 1}">다음</a></li>
-		  		</c:otherwise>
-		  	</c:choose>
-        	
-		  </ul>
-		  
-		  <a href = "write_view.do" class = "btn btn-primary pull-right">글쓰기</a>
-		</nav>
-		<nav aria-label = "search bar">
-			<div class = "md-form mt-0">
-				<form name = "f" action = "list.do" method = "get">
-					<input class = "form-control" name = "query" id = "query" type = "text" placeholder="Search" aria-label = "Search">
-					<input type = "submit" value = "검색">
-				</form>
-				
-			</div>
-		</nav>
+			<form class="form-inline d-flex	md-form form-sm active-pink-2 mt-2" action = "list.do" method = "get">
+				<input class="form-control mr-3 w-75" value = "${param.query}" name = "query" id = "query" type="text" placeholder="Search" aria-label="Search">
+	  			<input class = "btn btn-primary" type = "submit" value = "검색">
+			</form>
 		
-		
+			<nav aria-label="Page navigation example">
+			  <ul class="pagination justify-content-center">
+			  
+			  	<c:set var="isDisabled" value = ""/>
+			  	<c:choose>
+			  		<c:when test="${curPage <= 5}">
+			  			<li class="page-item disabled" ><a class="page-link" tabindex="-1" href="#">이전</a></li>
+			  		</c:when>
+			  		<c:otherwise>
+			  			<c:choose>
+	                   		<c:when test = "${empty param.query}">
+	                   			<li class="page-item" ><a class="page-link" href="list.do?pageNumber=${blockStartNum - 1}">이전</a></li>
+	                   		</c:when>
+	                   		<c:otherwise>
+	                   			<li class="page-item" ><a class="page-link" href="list.do?pageNumber=${blockStartNum - 1}&query=${param.query}">이전</a></li>
+	                   		</c:otherwise>
+	                   	</c:choose>
+			  		</c:otherwise>
+			  	</c:choose>
+			  	
+				<c:forEach var="i" begin="${ blockStartNum }" end="${ blockLastNum }">
+		            <c:choose>
+		                <c:when test="${ i > lastPageNum }">
+		                	<li class="page-item disabled">
+		                		<a class="page-link" href="#" tabindex="-1">${ i }</a>
+	                		</li>
+		                </c:when>
+		                
+		                <c:when test="${ i == curPage }">
+		                    <li class="page-item active">
+		                    	<c:choose>
+		                    		<c:when test = "${empty param.query}">
+		                    			<a class="page-link" href="list.do?pageNumber=${ i }">${ i }</a>
+		                    		</c:when>
+		                    		<c:otherwise>
+		                    			<a class="page-link" href="list.do?pageNumber=${ i }&query=${param.query}">${ i }</a>
+		                    		</c:otherwise>
+		                    	</c:choose>
+		                    </li>
+		                </c:when>
+		                
+		                <c:otherwise>
+		                	<li class="page-item">
+			                	<c:choose>
+		                    		<c:when test = "${empty param.query}">
+		                    			<a class="page-link" href="list.do?pageNumber=${ i }">${ i }</a>
+		                    		</c:when>
+		                    		<c:otherwise>
+		                    			<a class="page-link" href="list.do?pageNumber=${ i }&query=${param.query}">${ i }</a>
+		                    		</c:otherwise>
+		                    	</c:choose>
+	                    	 </li>
+		                </c:otherwise>
+		           	</c:choose>
+	        	</c:forEach>
+	        	
+	        	<c:choose>
+			  		<c:when test="${lastPageNum <= blockLastNum}">
+			  			<li class="page-item disabled" ><a class="page-link" tabindex="-1" href="#">다음</a></li>
+			  		</c:when>
+			  		<c:otherwise>
+			  			<c:choose>
+	                   		<c:when test = "${empty param.query}">
+	                   			<li class="page-item" ><a class="page-link" href="list.do?pageNumber=${blockLastNum + 1}">다음</a></li>
+	                   		</c:when>
+	                   		<c:otherwise>
+	                   			<li class="page-item" ><a class="page-link" href="list.do?pageNumber=${blockLastNum + 1}&query=${param.query}">다음</a></li>
+	                   		</c:otherwise>
+	                   	</c:choose>
+			  		</c:otherwise>
+			  	</c:choose>
+	        	
+			  </ul>
+			  
+			  <a href = "write_view.do" class = "btn btn-primary pull-right">글쓰기</a>
+			</nav>
+			
+		</div>
+
 	</div>
 	
 		
