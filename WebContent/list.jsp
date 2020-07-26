@@ -14,9 +14,10 @@
 <link rel = "stylesheet" href = "css/custom.css">
 <title>JSP 게시판 웹사이트</title>
 <style type = "text/css">
-	a, a:hover{
+	a.content-link, a.content-link:hover{
 		color : #000000;
 		text-decoration: none;
+		!important
 	}
 </style>
 </head>
@@ -26,7 +27,6 @@
 	</jsp:include>
 	
 	<div class ="container">
-		<div class = "row">
 			<table class="table table-striped" style = "text-align:center; border:1px solid #dddddd">
 				<thead>
 					<tr>
@@ -40,14 +40,13 @@
 					<c:forEach items = "${list}" var = "bbs">
 						<tr>
 						<td>${bbs.bbsID}</td>		
-						<td><a href = "content_view.do?bbsID=${bbs.bbsID}">${bbs.bbsTitle}</a></td>					
+						<td><strong><a href = "content_view.do?bbsID=${bbs.bbsID}" class = "content-link">${bbs.bbsTitle}</a></strong></td>					
 						<td>${bbs.userID}</td>					
 						<td>${bbs.bbsDate}</td>					
 					</tr>
 					</c:forEach>
 				</tbody>
 			</table>
-		</div>
 			
 		<div class = "text-center">
 			<c:set var = "curPage" value = "${paging.getCurPage()}"/>
