@@ -27,10 +27,10 @@
 	</jsp:include>
 	
 	<div class ="container">
-			<table class="table table-striped" style = "text-align:center; border:1px solid #dddddd">
+			<table class="table table-hover" style = "text-align:center; border:1px solid #dddddd">
 				<thead>
 					<tr>
-						<th style = "background-color:#eeeeee; text-align:center;">번호</th>
+						<th class = "col-xs-2" style = "background-color:#eeeeee; text-align:center;">번호</th>
 						<th style = "background-color:#eeeeee; text-align:center;">제목</th>
 						<th style = "background-color:#eeeeee; text-align:center;">작성자</th>
 						<th style = "background-color:#eeeeee; text-align:center;">작성일</th>
@@ -54,7 +54,7 @@
 			<c:set var = "blockLastNum" value = "${paging.getBlockLastNum()}"/>
 			<c:set var = "lastPageNum" value = "${paging.getLastPageNum()}"/>
 		
-			<form class="form-inline d-flex	md-form form-sm active-pink-2 mt-2" action = "list.do" method = "get">
+			<form class="form-inline d-flex	xs-form form-xs active-pink-2 mt-2" action = "list.do" method = "get">
 				<input class="form-control mr-3 w-75" value = "${param.query}" name = "query" id = "query" type="text" placeholder="Search" aria-label="Search">
 	  			<input class = "btn btn-primary" type = "submit" value = "검색">
 			</form>
