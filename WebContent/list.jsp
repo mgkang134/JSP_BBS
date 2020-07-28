@@ -54,9 +54,11 @@
 			<c:set var = "blockLastNum" value = "${paging.getBlockLastNum()}"/>
 			<c:set var = "lastPageNum" value = "${paging.getLastPageNum()}"/>
 		
-			<form class="form-inline d-flex	xs-form form-xs active-pink-2 mt-2" action = "list.do" method = "get">
-				<input class="form-control mr-3 w-75" value = "${param.query}" name = "query" id = "query" type="text" placeholder="Search" aria-label="Search">
+			<form class="form-group row" action = "list.do" method = "get">
+			<div class = "col-xs-8 col-xs-offset-2">
+				<input class="form-control" value = "${param.query}" name = "query" id = "query" type="text" placeholder="Search" aria-label="Search">
 	  			<input class = "btn btn-primary" type = "submit" value = "검색">
+			</div>
 			</form>
 		
 			<nav aria-label="Page navigation example">
