@@ -30,17 +30,17 @@
 			<table class="table table-hover" style = "text-align:center; border:1px solid #dddddd">
 				<thead>
 					<tr>
-						<th class = "col-xs-2" style = "background-color:#eeeeee; text-align:center;">번호</th>
-						<th style = "background-color:#eeeeee; text-align:center;">제목</th>
-						<th style = "background-color:#eeeeee; text-align:center;">작성자</th>
-						<th style = "background-color:#eeeeee; text-align:center;">작성일</th>
+						<th class = "col-xs-2 col-md-1" style = "background-color:#eeeeee; text-align:center;">번호</th>
+						<th class = "col-xs-6 col-md-7" style = "background-color:#eeeeee; text-align:center;">제목</th>
+						<th class = "col-xs-2 col-md-2" style = "background-color:#eeeeee; text-align:center;">작성자</th>
+						<th class = "col-xs-2 col-md-2" style = "background-color:#eeeeee; text-align:center;">작성일</th>
 					</tr>				
 				</thead>
 				<tbody>
 					<c:forEach items = "${list}" var = "bbs">
 						<tr>
 						<td>${bbs.bbsID}</td>		
-						<td><strong><a href = "content_view.do?bbsID=${bbs.bbsID}" class = "content-link">${bbs.bbsTitle}</a></strong></td>					
+						<td class="text-left"><strong><a href = "content_view.do?bbsID=${bbs.bbsID}" class = "content-link">${bbs.bbsTitle}</a></strong></td>					
 						<td>${bbs.userID}</td>					
 						<td>${bbs.bbsDate}</td>					
 					</tr>
