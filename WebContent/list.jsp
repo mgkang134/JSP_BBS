@@ -27,7 +27,7 @@
 	</jsp:include>
 	
 	<div class ="container">
-			<table class="table table-hover" style = "text-align:center; border:1px solid #dddddd">
+			<table class="table table-hover" style = "text-align:center; border:1px solid #dddddd;">
 				<thead>
 					<tr>
 						<th class = "col-xs-2 col-md-1" style = "background-color:#eeeeee; text-align:center;">번호</th>
@@ -40,9 +40,14 @@
 					<c:forEach items = "${list}" var = "bbs">
 						<tr>
 						<td>${bbs.bbsID}</td>		
-						<td class="text-left"><strong><a href = "content_view.do?bbsID=${bbs.bbsID}" class = "content-link">${bbs.bbsTitle}</a></strong></td>					
+							<td class="text-left" style = "max-width: 177px;">
+							<span style = "white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: inline-block; max-width: 100%;">
+								<strong><a href = "content_view.do?bbsID=${bbs.bbsID}" class = "content-link">${bbs.bbsTitle}</a></strong>
+							</span>
+							</td>
+						
 						<td>${bbs.userID}</td>					
-						<td>${bbs.bbsDate}</td>					
+						<td class = "text-truncate">${bbs.bbsDate}</td>					
 					</tr>
 					</c:forEach>
 				</tbody>
