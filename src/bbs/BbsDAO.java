@@ -5,225 +5,213 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.OptionalInt;
 
-enum Option{
-	EntireSearch,
-	QuerySearch
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import sqlmap.SqlSessionManager;
+
+enum Option {
+	EntireSearch, QuerySearch
 }
 
 public class BbsDAO {
-	
+
 	private Connection conn;
 	private ResultSet rs;
-	public BbsDAO() {
-		try {
-			String dbURL = "jdbc:mysql://localhost:3306/BBS?serverTimezone=Asia/Seoul&useSSL=false";
-			String dbID = "root";
-			String dbPassword = "root";
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	public String getDate() {
-		String SQL = "select now()";
+
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				return rs.getString(1);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			Optional<String> dateMaybe = Optional.ofNullable(session.selectOne("bbs.getDate"));
+			return dateMaybe.orElse(""); // ë§Œì•½ ì¿¼ë¦¬ ê²°ê³¼ê°€ nullì¸ ê²½ìš° ""ë¥¼ ë¦¬í„´í•œë‹¤.
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return ""; 	//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
-	
+
 	public int getNext() {
-		String SQL = "select bbsID from bbs order by bbsID desc";
+
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				return rs.getInt(1) + 1;
-			}
-			return 1;
-		} catch (Exception e) {
-			e.printStackTrace();
+			OptionalInt sequenceMaybe = OptionalInt.of(session.selectOne("bbs.getNext"));
+			return sequenceMaybe.getAsInt(); // ë§Œì•½ ì¿¼ë¦¬ ê²°ê³¼ê°€ ì—†ì„ ê²½ìš° ì˜ˆì™¸ ë°œìƒ(NoSuchElementException)
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return -1; 	//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
-	
+
 	public int getTotalNum() {
-		String SQL = "select count(*) from bbs where bbsAvailable != 0";
+
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				return rs.getInt(1);
-			}
-			return 0;
-		} catch (Exception e) {
-			e.printStackTrace();
+			OptionalInt sequenceMaybe = OptionalInt.of(session.selectOne("bbs.getTotalNum"));
+			return sequenceMaybe.getAsInt(); // ë§Œì•½ ì¿¼ë¦¬ ê²°ê³¼ê°€ ì—†ì„ ê²½ìš° ì˜ˆì™¸ ë°œìƒ(NoSuchElementException)
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return -1; 	//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
-	
+
 	public int getTotalNum(String query) {
-		String SQL = "select count(*) from bbs where bbsAvailable != 0 and bbsContent like ?";
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, "%" + query + "%");
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				return rs.getInt(1);
-			}
-			return 0;
-		} catch (Exception e) {
-			e.printStackTrace();
+			Map<String, Object> param = new HashMap<>();
+			param.put("query", query);
+
+			OptionalInt sequenceMaybe = OptionalInt.of(session.selectOne("bbs.getTotalNum", param));
+			return sequenceMaybe.getAsInt(); // ë§Œì•½ ì¿¼ë¦¬ ê²°ê³¼ê°€ ì—†ì„ ê²½ìš° ì˜ˆì™¸ ë°œìƒ(NoSuchElementException)
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return -1; 	//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
-	
+
 	public int write(String bbsTitle, String userID, String bbsContent) {
-		
-		String SQL = "insert into bbs values (?, ?, ?, ?, ?, ?)";
-		
+
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, getNext());
-			pstmt.setString(2, bbsTitle);
-			pstmt.setString(3, userID);
-			pstmt.setString(4, getDate());
-			pstmt.setString(5, bbsContent);
-			pstmt.setInt(6, 1);
-			return pstmt.executeUpdate();
+			Map<String, Object> param = new HashMap<>();
+			param.put("id", getNext());
+			param.put("bbsTitle", bbsTitle);
+			param.put("userID", userID);
+			param.put("bbsDate", getDate());
+			param.put("bbsContent", bbsContent);
+			param.put("available", 1);
+
+			int result = session.insert("bbs.write", param);
+			session.commit();
+			return result;
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return -1; 	//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
-	
-	public ArrayList<Bbs> getList(int pageNumber){
-		
-		String SQL = "select b.* from (SELECT * FROM bbs WHERE bbsAvailable = 1 ORDER BY bbsID DESC) as b LIMIT ?, 10;";
-		ArrayList<Bbs> list = new ArrayList<Bbs>();
-		
+
+	public ArrayList<Bbs> getList(int pageNumber) {
+
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1 , (pageNumber-1)*10);
-			
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				Bbs bbs = new Bbs();
-				bbs.setBbsID(rs.getInt(1));
-				bbs.setBbsTitle(rs.getString(2));
-				bbs.setUserID(rs.getString(3));
-				bbs.setBbsDate(rs.getString(4));
-				bbs.setBbsContent(rs.getString(5));
-				bbs.setBbsAvailable(rs.getInt(6));
-				list.add(bbs);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+
+			Map<String, Object> param = new HashMap<>();
+			param.put("pageNumber", (pageNumber-1)*10);
+
+			List<Bbs> list = session.selectList("bbs.getList", param);
+
+			// Listë¥¼ ArrayListë¡œ ë³€í™˜
+			ArrayList<Bbs> arrayList = new ArrayList<Bbs>();
+			arrayList.addAll(list);
+
+			return arrayList;
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return list; 	
 	}
-	
-public ArrayList<Bbs> getList(int pageNumber, String query){
-		
-	String SQL = "select b.* from (SELECT * FROM bbs WHERE bbsAvailable = 1 AND (bbsTitle like ? OR bbsContent like ?) ORDER BY bbsID DESC) as b LIMIT ?, 10;";
-		ArrayList<Bbs> list = new ArrayList<Bbs>();
-		
+
+	public ArrayList<Bbs> getList(int pageNumber, String query) {
+
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, "%" + query + "%");
-			pstmt.setString(2, "%" + query + "%");
-			pstmt.setInt(3, (pageNumber-1)*10);
-			rs = pstmt.executeQuery();
-			while(rs.next()) {
-				Bbs bbs = new Bbs();
-				bbs.setBbsID(rs.getInt(1));
-				bbs.setBbsTitle(rs.getString(2));
-				bbs.setUserID(rs.getString(3));
-				bbs.setBbsDate(rs.getString(4));
-				bbs.setBbsContent(rs.getString(5));
-				bbs.setBbsAvailable(rs.getInt(6));
-				list.add(bbs);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			Map<String, Object> param = new HashMap<>();
+			param.put("pageNumber", (pageNumber-1)*10);
+			param.put("query", query);
+
+			List<Bbs> list = session.selectList("bbs.getList", param);
+
+			// Listë¥¼ ArrayListë¡œ ë³€í™˜
+			ArrayList<Bbs> arrayList = new ArrayList<Bbs>();
+			arrayList.addAll(list);
+
+			return arrayList;
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return list; 	
 	}
-	
-	
-	
-	public boolean nextPage(int pageNumber) {
-		String SQL = "SELECT * FROM bbs WHERE bbsID < ? AND bbsAvailable = 1";
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, getNext() - (pageNumber-1) * 10);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				return true;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
-	
+
+//	public boolean nextPage(int pageNumber) {
+//		String SQL = "SELECT * FROM bbs WHERE bbsID < ? AND bbsAvailable = 1";
+//		try {
+//			PreparedStatement pstmt = conn.prepareStatement(SQL);
+//			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);
+//			rs = pstmt.executeQuery();
+//			if (rs.next()) {
+//				return true;
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		return false;
+//	}
+
 	public Bbs getBbs(int bbsID) {
-		String SQL = "SELECT * FROM bbs WHERE bbsID = ?";
+
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, bbsID);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				Bbs bbs = new Bbs();
-				bbs.setBbsID(rs.getInt(1));
-				bbs.setBbsTitle(rs.getString(2));
-				bbs.setUserID(rs.getString(3));
-				bbs.setBbsDate(rs.getString(4));
-				bbs.setBbsContent(rs.getString(5));
-				bbs.setBbsAvailable(rs.getInt(6));
-				return bbs;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			return session.selectOne("bbs.getBbs", bbsID);
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return null;
 	}
-	
+
 	public int update(int bbsID, String bbsTitle, String bbsContent) {
-		String SQL = "UPDATE bbs SET bbsTitle = ?, bbsContent = ? WHERE bbsID = ?";
-		
+
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, bbsTitle);
-			pstmt.setString(2, bbsContent);
-			pstmt.setInt(3, bbsID);
-			return pstmt.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
+			Map<String, Object> param = new HashMap<>();
+			param.put("bbsID", bbsID);
+			param.put("bbsTitle", bbsTitle);
+			param.put("bbsContent", bbsContent);
+
+			int result = session.update("bbs.update", param);
+			session.commit();
+			return result;
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return -1; 	//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
-	
+
 	public int delete(int bbsID) {
-		String SQL = "UPDATE bbs SET bbsAvailable = 0 where bbsID = ?";
+		// ì„¸ì…˜ ì—´ê¸°
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(SQL);
-			pstmt.setInt(1, bbsID);
-			return pstmt.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
+			int result = session.update("bbs.delete", bbsID);
+			session.commit();
+			return result;
+		} finally {
+			session.close(); // ì„¸ì…˜ ë‹«ê¸°
 		}
-		return -1; 	//µ¥ÀÌÅÍº£ÀÌ½º ¿À·ù
 	}
 }

@@ -16,16 +16,16 @@ public class BContentCommand implements BCommand {
 		BbsDAO dao = new BbsDAO();
 		Bbs bbs = dao.getBbs(bbsID);
 		
-		//³¯Â¥ Ãâ·Â Çü½Ä º¯°æ
+		//ï¿½ï¿½Â¥ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		String bbsDate = bbs.getBbsDate();
-		bbs.setBbsDate(bbsDate.substring(0, 11) + bbsDate.substring(11, 13) + "½Ã" + bbsDate.substring(14, 16) + "ºÐ");
+		bbs.setBbsDate(bbsDate.substring(0, 11) + bbsDate.substring(11, 13) + "ì‹œ" + bbsDate.substring(14, 16) + "ë¶„");
 		
-		//³»¿ë Ãâ·Â Çü½Ä º¯°æ(º¸¾È)
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
 		String bbsContent = bbs.getBbsContent();
 		bbsContent = bbsContent.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>");
 		bbs.setBbsContent(bbsContent);
 		
-		//Á¦¸ñ Ãâ·Â Çü½Ä º¯°æ(º¸¾È)
+		//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
 		String bbsTitle = bbs.getBbsTitle();
 		bbsTitle = bbsTitle.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>");
 		bbs.setBbsTitle(bbsTitle);

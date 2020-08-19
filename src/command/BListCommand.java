@@ -14,18 +14,18 @@ public class BListCommand implements BCommand {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
 		// TODO Auto-generated method stub
-
+		
 		BbsDAO dao = new BbsDAO();
-		int pageNumber = 1;														//±âº» ÆäÀÌÁö´Â 1ÆäÀÌÁö
-		if(request.getParameter("pageNumber")!=null) {							//ÆäÀÌÁö ³Ñ¹ö°¡ ¸í½ÃµÈ °æ¿ì(URL get¹æ½ÄÀ¸·Î)
-			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));	//ÆäÀÌÁö ³Ñ¹ö Àû¿ë
+		int pageNumber = 1;														//ï¿½âº» ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		if(request.getParameter("pageNumber")!=null) {							//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¹ï¿½ï¿½ï¿½ ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½(URL getï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¹ï¿½ ï¿½ï¿½ï¿½ï¿½
 		}
 		request.setAttribute("pageNumber", pageNumber);
 		
-		String query = null;													//°Ë»ö Äõ¸®°¡ ÆÄ¶ó¹ÌÅÍ·Î ³Ñ¾î¿ÔÀ» °æ¿ì
+		String query = null;													//ï¿½Ë»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¶ï¿½ï¿½ï¿½Í·ï¿½ ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
 		query = request.getParameter("query");
 		
-		//ÆäÀÌÂ¡ Ã³¸®
+		//ï¿½ï¿½ï¿½ï¿½Â¡ Ã³ï¿½ï¿½
 		Paging paging;
 		
 		if(query==null) {
@@ -44,18 +44,18 @@ public class BListCommand implements BCommand {
 			bbss = dao.getList(pageNumber, query);
 		}
 							
-		for(Bbs bbs : bbss) { 											//list.jsp¿¡ ¸Â°Ô °¡°øÇÑ´Ù.
+		for(Bbs bbs : bbss) { 											//list.jspï¿½ï¿½ ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ñ´ï¿½.
 			
-			//³¯Â¥ Ãâ·Â Çü½Ä º¯°æ
+			//ï¿½ï¿½Â¥ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			String bbsDate = bbs.getBbsDate();
-			bbs.setBbsDate(bbsDate.substring(0, 11) + bbsDate.substring(11, 13) + "½Ã" + bbsDate.substring(14, 16) + "ºÐ");
+			bbs.setBbsDate(bbsDate.substring(0, 11) + bbsDate.substring(11, 13) + "ì‹œ" + bbsDate.substring(14, 16) + "ë¶„");
 			
-			//³»¿ë Ãâ·Â Çü½Ä º¯°æ(º¸¾È)
+			//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
 			String bbsContent = bbs.getBbsContent();
 			bbsContent = bbsContent.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>");
 			bbs.setBbsContent(bbsContent);
 			
-			//Á¦¸ñ Ãâ·Â Çü½Ä º¯°æ(º¸¾È)
+			//ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½)
 			String bbsTitle = bbs.getBbsTitle();
 			bbsTitle = bbsTitle.replaceAll(" ", "&nbsp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>");
 			bbs.setBbsTitle(bbsTitle);
