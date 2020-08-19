@@ -4,63 +4,49 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+
+import sqlmap.SqlSessionManager;
 
 public class UserDAO {
-
-	private Connection conn;
-	private PreparedStatement pstmt;
-	private ResultSet rs;
-	
-	public UserDAO() {
-		try {
-			String dbURL = "jdbc:mysql://localhost:3306/BBS?serverTimezone=Asia/Seoul&useSSL=false";
-			String dbID = "root";
-			String dbPassword = "root";
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	public int Login(String userID, String userPassword) {
-		String SQL = "select userPassword from user where userID = ?";
-		try {
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, userID);
-			rs = pstmt.executeQuery();
-			if(rs.next()) {
-				if(rs.getString(1).equals(userPassword)) {
-					return 1;	//∫Òπ–π¯»£ ¿œƒ°
-				}
-				else
-					return 0;	//∫Òπ–π¯»£ ∫“¿œƒ°
-			}
-			return -1; 	// æ∆¿Ãµ∞° æ¯¿Ω
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return -2;	//µ•¿Ã≈Õ∫£¿ÃΩ∫ ø¿∑˘
 		
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+		
+		try {
+			Map<String, Object> param = new HashMap<>();
+			param.put("userID", userID);
+			Optional<Object> passwordMaybe = Optional.ofNullable(session.selectOne("user.getPassword", param));
+			String realPassword = passwordMaybe.map(Object::toString).orElse("");
+			if (realPassword.equals(userPassword)) {
+				return 1; //ÎπÑÎ∞ÄÎ≤àÌò∏ ÏùºÏπò
+			} else {
+				return 0; //ÎπÑÎ∞ÄÎ≤àÌò∏ Î∂àÏùºÏπò
+			} 
+		} finally {
+			session.close();
+		}
 	}
 	
 	public int join(User user) {
-		String SQL = "insert into user values(?, ?, ?, ?, ?)";
-		try {
-			pstmt = conn.prepareStatement(SQL);
-			pstmt.setString(1, user.getUserID());
-			pstmt.setString(2, user.getUserPassword());
-			pstmt.setString(3, user.getUserName());
-			pstmt.setString(4, user.getUserGender());
-			pstmt.setString(5, user.getUserEmail());
-			return pstmt.executeUpdate();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return -1;
 		
+		SqlSessionFactory sqlSessionFactory = SqlSessionManager.getSqlSession();
+		SqlSession session = sqlSessionFactory.openSession();
+		
+		try {
+			int result = session.insert("user.join", user);
+			session.commit();
+			return result;
+		} finally {
+			session.close();
+		}
 	}
-	
 	
 }

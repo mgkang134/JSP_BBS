@@ -22,9 +22,6 @@ enum Option {
 
 public class BbsDAO {
 
-	private Connection conn;
-	private ResultSet rs;
-
 	public String getDate() {
 
 		// 세션 열기
@@ -152,21 +149,6 @@ public class BbsDAO {
 			session.close(); // 세션 닫기
 		}
 	}
-
-//	public boolean nextPage(int pageNumber) {
-//		String SQL = "SELECT * FROM bbs WHERE bbsID < ? AND bbsAvailable = 1";
-//		try {
-//			PreparedStatement pstmt = conn.prepareStatement(SQL);
-//			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);
-//			rs = pstmt.executeQuery();
-//			if (rs.next()) {
-//				return true;
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		return false;
-//	}
 
 	public Bbs getBbs(int bbsID) {
 
