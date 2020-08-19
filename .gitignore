@@ -5,6 +5,9 @@ target/**
 *.ear
 *.class
 
+# build directroy
+build/*
+
 # eclipse specific
 *.pydevproject
 .project
